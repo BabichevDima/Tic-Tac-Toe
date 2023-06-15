@@ -54,7 +54,14 @@ export default function Game() {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
   const currentSquares = history[history.length - 1];
+
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove);
+    setXIsNext(nextMove % 2 === 0);
+    setSquares(history[nextMove]);
+  }
 
   function handleClick(i) {
     const nextSquares = squares.slice();
@@ -70,16 +77,20 @@ export default function Game() {
     }
 
     setSquares(nextSquares);
+
+    // debugger
+    setHistory([...history, nextSquares]);
+
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+    setXIsNext(!xIsNext);
   }
 
   function handleRestartButtonClick() {
-    let isRestart = window.confirm("Are you sure you want to restart game?");
-    if (isRestart) {
-      setSquares(Array(9).fill(null));
-      setXIsNext(true);
-    } else {
-      alert("Player '" + `${xIsNext ? "X" : "O"}` + "' your turn.");
-    }
+    setSquares(Array(9).fill(null));
+    setXIsNext(true);
+    setHistory([Array(9).fill(null)]);
   }
 
   function calculateWinner(squares) {
@@ -112,10 +123,27 @@ export default function Game() {
   if (winner) {
     status = "Winner: " + winner;
     restartButtonText = "Next Game";
-  } else {
+  } else if (history.length === 10) {
+    restartButtonText = "Next Game";
+    status = "Draw in the game";
+  } else if (history.length != 10) {
     status = "Next player: " + (xIsNext ? "X" : "O");
     restartButtonText = "Restart Game";
   }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = "Go to move #" + move;
+    } else {
+      description = "Clean board and restart Game";
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
 
   return (
     <div className="game-1">
@@ -130,7 +158,7 @@ export default function Game() {
       </div>
 
       <div className="game-info">
-        <ol>{/*TODO*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
