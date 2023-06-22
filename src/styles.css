@@ -102,7 +102,13 @@ body {
 
 /* <!-- HTML !--> */
 /* <button class="button-55" role="button">Button 55</button> */
+/* .listHistory {
+  opacity: 0;
+}
 
+li {
+  transition: all 5s ease;
+} */
 /* CSS */
 .button {
   align-self: center;
@@ -134,6 +140,23 @@ body {
   margin-bottom: 15px;
   -webkit-user-select: none;
   touch-action: manipulation;
+}
+
+.listHistory {
+  transform: translate(10px, 120%);
+  animation: ani 0.5s forwards;
+  opacity: 0;
+}
+
+@keyframes ani {
+  0% {
+    transform: translate(0px, 120%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0px, 0%);
+    opacity: 1;
+  }
 }
 
 .button:hover {

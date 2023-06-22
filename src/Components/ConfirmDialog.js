@@ -8,30 +8,30 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CachedIcon from "@mui/icons-material/Cached";
 
-export function AlertDialog({ handleRestartButtonClick }) {
+export function ConfirmDialog(props) {
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
-  };
+  }
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
 
   return (
     <div>
       <IconButton
         aria-label="add an alarm"
         className="refresh-button"
-        onClick={handleClickOpen}
+        onClick={() => handleClickOpen()}
       >
         <CachedIcon />
         <span className="tooltiptextbutton">Refresh Game</span>
       </IconButton>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -45,13 +45,13 @@ export function AlertDialog({ handleRestartButtonClick }) {
           <Button
             variant="contained"
             onClick={() => {
-              handleRestartButtonClick();
+              props.handleRestartButtonClick();
               handleClose();
             }}
           >
             Refresh
           </Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={() => handleClose()} autoFocus>
             Close
           </Button>
         </DialogActions>
